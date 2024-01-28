@@ -17,20 +17,17 @@ function buildStyles() {
         .pipe(gulpCleanCss({compatibility: 'ie8'}))
         .pipe(dest('./assets/build'));
 }
-
-function watchStyles() {
-    watch('./assets/scss/**/*.scss', buildStyles);
-}
-
+ 
 function buildJs() {
     return src('./assets/js/app.js')
         .pipe(minifyJs())
         .pipe(dest('./assets/build'));
 }
 
-function watchJs() {
+
+function watchFiles() {
+    watch('./assets/scss/**/*.scss', buildStyles);
     watch('./assets/js/**/*.js', buildJs);
 }
 
-
-exports.default = series(buildStyles, buildJs, watchStyles, watchJs);
+exports.default = series(buildStyles, buildJs, watchFiles);
