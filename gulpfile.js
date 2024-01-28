@@ -1,6 +1,6 @@
 /**
  * npm install --global gulp-cli
- * npm install gulp gulp-sass sass gulp-clean-css --save-dev
+ * npm install gulp gulp-sass sass gulp-clean-css gulp-uglify --save-dev
  *
  * After all, run "gulp" command on cmd
  *
@@ -8,6 +8,7 @@
 const {src, dest, watch, series} = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const gulpCleanCss = require('gulp-clean-css');
+const minifyJs = require('gulp-uglify');
 
 function buildStyles() {
     // place code for your default task here
@@ -21,4 +22,15 @@ function watchStyles() {
     watch('./assets/scss/**/*.scss', buildStyles);
 }
 
-exports.default = series(buildStyles, watchStyles);
+function buildJs() {
+    return src('./assets/js/app.js')
+        .pipe(minifyJs())
+        .pipe(dest('./assets/build'));
+}
+
+function watchJs() {
+    watch('./assets/js/**/*.js', buildJs);
+}
+
+
+exports.default = series(buildStyles, buildJs, watchStyles, watchJs);
